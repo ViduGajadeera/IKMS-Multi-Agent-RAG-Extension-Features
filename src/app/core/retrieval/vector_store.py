@@ -26,6 +26,7 @@ def _get_vector_store() -> PineconeVectorStore:
     embeddings = OpenAIEmbeddings(
         model=settings.openai_embedding_model_name,
         api_key=settings.openai_api_key,
+        dimensions=1536,  # Match Pinecone index dimension
     )
 
     return PineconeVectorStore(
@@ -63,18 +64,15 @@ def retrieve(query: str, k: int | None = None) -> List[Document]:
     retriever = get_retriever(k=k)
     return retriever.invoke(query)
 
-def index_documents(file_path: Path) -> int:
+def index_documents(docs: List[Document]) -> int:
     """Index a list of Document objects into the Pinecone vector store.
 
     Args:
         docs: Documents to embed and upsert into the vector index.
 
     Returns:
-        The number of documents indexed.
+        The number of document chunks indexed.
     """
-    loader = PyPDFLoader(str(file_path), mode="single")
-    docs = loader.load()
-
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     texts = text_splitter.split_documents(docs)
 

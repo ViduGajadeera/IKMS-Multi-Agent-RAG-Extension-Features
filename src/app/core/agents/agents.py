@@ -62,15 +62,39 @@ def retrieval_node(state: QAState) -> QAState:
 
     messages = result.get("messages", [])
     context = ""
+    citations = {}
 
     # Prefer the last ToolMessage content (from retrieval_tool)
+    docs = []
     for msg in reversed(messages):
         if isinstance(msg, ToolMessage):
             context = str(msg.content)
+            docs = msg.artifact or []
             break
+    else:
+        # No ToolMessage found - return empty context
+        return {"context": "", "citations": {}}
+    
+    context_parts = []
+
+    for i, doc in enumerate(docs):
+        chunk_id = f"C{i+1}"
+        page = doc.metadata.get("page", "unknown")
+        source = doc.metadata.get("source", "unknown")
+
+        context_parts.append(
+            f"[{chunk_id}] (Page {page})\n{doc.page_content}"
+        )
+
+        citations[chunk_id] = {
+            "page": page,
+            "source": source,
+            "snippet": doc.page_content[:120] + "..."
+        }
 
     return {
-        "context": context,
+        "context": "\n\n".join(context_parts),
+        "citations": citations,
     }
 
 
@@ -127,5 +151,6 @@ Please verify and correct the draft answer, removing any unsupported claims."""
     answer = _extract_last_ai_content(messages)
 
     return {
-        "answer": answer,
-    }
+    "answer": answer,
+    "citations": state.get("citations"),
+}

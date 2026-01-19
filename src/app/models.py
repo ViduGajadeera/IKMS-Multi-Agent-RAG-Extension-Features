@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional, Dict
 
 
 class QuestionRequest(BaseModel):
@@ -12,12 +13,8 @@ class QuestionRequest(BaseModel):
 
 
 class QAResponse(BaseModel):
-    """Response body for the `/qa` endpoint.
-
-    From the API consumer's perspective we only expose the final,
-    verified answer plus some metadata (e.g. context snippets).
-    Internal draft answers remain inside the agent pipeline.
-    """
+    """Response body for the `/qa` endpoint."""
 
     answer: str
-    context: str
+    context: Optional[str] = None
+    citations: Optional[Dict[str, dict]] = None

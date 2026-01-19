@@ -1,6 +1,7 @@
 """LangGraph state schema for the multi-agent QA flow."""
 
-from typing import TypedDict
+from typing import TypedDict,Optional, Dict
+
 
 
 class QAState(TypedDict):
@@ -16,3 +17,4 @@ class QAState(TypedDict):
     context: str | None
     draft_answer: str | None
     answer: str | None
+    citations: Dict[str, dict]
