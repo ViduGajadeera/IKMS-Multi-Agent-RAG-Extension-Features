@@ -19,7 +19,7 @@ export default function App() {
     setCitations(null);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/qa", {
+      const res = await fetch("https://ikms-multi-agent-rag-extension-features.onrender.com/qa", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question }),
