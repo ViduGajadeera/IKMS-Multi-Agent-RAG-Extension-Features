@@ -13,17 +13,19 @@ export default function App() {
       return;
     }
 
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
     setLoading(true);
     setAnswer("");
     setContext("");
     setCitations(null);
 
     try {
-      const res = await fetch("https://ikms-multi-agent-rag-extension-features.onrender.com/qa", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question }),
-      });
+      const res =await fetch(`${BACKEND_URL}/qa`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ question }),
+});
 
       const data = await res.json();
 
