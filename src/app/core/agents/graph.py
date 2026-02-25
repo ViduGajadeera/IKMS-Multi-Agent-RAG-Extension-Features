@@ -59,6 +59,7 @@ def run_qa_flow(question: str) -> Dict[str, Any]:
         - `answer`: Final verified answer
         - `draft_answer`: Initial draft answer from summarization agent
         - `context`: Retrieved context from vector store
+        - `citations`: Citation metadata for retrieved context (chunk -> metadata)
     """
     graph = get_qa_graph()
 
@@ -67,6 +68,7 @@ def run_qa_flow(question: str) -> Dict[str, Any]:
         "context": None,
         "draft_answer": None,
         "answer": None,
+        "citations": {},
     }
 
     final_state = graph.invoke(initial_state)
