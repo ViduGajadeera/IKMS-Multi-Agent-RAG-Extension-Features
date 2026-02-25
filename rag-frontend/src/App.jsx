@@ -1,10 +1,33 @@
 import { useState } from "react";
 
+
+function renderAnswerWithCitations(text) {
+  if (!text) return null;
+
+  
+  const parts = text.split(/(\[C\d+\])/i);
+
+  return parts.map((part, idx) => {
+    const citationMatch = part.match(/\[C(\d+)\]/i);
+    if (citationMatch) {
+      const citationNumber = citationMatch[1];
+    
+      return (
+        <span key={idx} className="mx-1 text-primary">
+          [{`c${citationNumber}`}]
+        </span>
+      );
+    }
+    return <span key={idx}>{part}</span>;
+  });
+}
+
 export default function App() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [context, setContext] = useState("");
   const [citations, setCitations] = useState(null);
+  const [rawResponse, setRawResponse] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const askQuestion = async () => {
@@ -13,7 +36,8 @@ export default function App() {
       return;
     }
 
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+    
 
     setLoading(true);
     setAnswer("");
@@ -28,6 +52,8 @@ export default function App() {
 });
 
       const data = await res.json();
+    console.debug("QA response from backend:", data);
+    setRawResponse(data);
 
       setAnswer(data.answer || "No answer returned");
       setContext(data.context || "");
@@ -90,7 +116,9 @@ export default function App() {
               <i className="bi bi-chat-left-text-fill"></i>
               Response
             </h5>
-            <p className="card-text">{answer}</p>
+            <p className="card-text" style={{ lineHeight: "1.8" }}>
+              {answer}
+            </p>
           </div>
         </div>
       )}
@@ -132,6 +160,18 @@ export default function App() {
           </div>
         </div>
       )}
+
+        {/* Raw response (debug) */}
+        {rawResponse && (
+          <div className="card mt-3 shadow-sm">
+            <div className="card-body">
+              <h5 className="card-title">Raw backend response (debug)</h5>
+              <pre className="bg-light p-3 rounded small mb-0">
+                {JSON.stringify(rawResponse, null, 2)}
+              </pre>
+            </div>
+          </div>
+        )}
     </div>
   );
 }

@@ -390,6 +390,18 @@ Medium
 https://medium.com/@alexrodriguesj/building-a-vector-store-from-pdfs-documents-using-pinecone-and-langchain-
 a5c991b2a
 
+
+## Summary
+This repository contains a multi-agent Retrieval-Augmented Generation (RAG) system using LangChain. It has three agents:
+- **Retrieval Agent**: fetches relevant document chunks from a vector database.
+- **Summarization Agent**: generates a draft answer strictly based on context with citations.
+- **Verification Agent**: ensures factual accuracy and enforces citations in IEEE style.
+
+## Changes in this version
+- Updated Summarization and Verification agents to enforce [C#] citations.
+- Ensured all factual sentences in answers reference context chunks.
+- Added `_enforce_citations` function as a safety net for citation enforcement.
+- Updated prompts for correct IEEE-style citations.
 ```
 1
 ```

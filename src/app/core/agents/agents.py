@@ -65,15 +65,14 @@ def retrieval_node(state: QAState) -> QAState:
     citations = {}
 
     # Prefer the last ToolMessage content (from retrieval_tool)
-    docs = []
     for msg in reversed(messages):
         if isinstance(msg, ToolMessage):
             context = str(msg.content)
-            docs = msg.artifact or []
+            docs = msg.artifact
             break
-    else:
-        # No ToolMessage found - return empty context
-        return {"context": "", "citations": {}}
+
+        else:
+            return{}
     
     context_parts = []
 
