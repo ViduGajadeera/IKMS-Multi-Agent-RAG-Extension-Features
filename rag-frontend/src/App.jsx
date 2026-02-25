@@ -36,7 +36,8 @@ export default function App() {
       return;
     }
 
-   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+   //const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+   const BACKEND_URL = "http://localhost:8000";
    
     
 
@@ -161,18 +162,6 @@ export default function App() {
           </div>
         </div>
       )}
-
-        {/* Raw response (debug) */}
-        {rawResponse && (
-          <div className="card mt-3 shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title">Raw backend response (debug)</h5>
-              <pre className="bg-light p-3 rounded small mb-0">
-                {JSON.stringify(rawResponse, null, 2)}
-              </pre>
-            </div>
-          </div>
-        )}
     </div>
   );
 }
